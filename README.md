@@ -33,8 +33,7 @@ Le projet est divisé en scripts modulaires exécutables séquentiellement :
 
 ## Installation & Utilisation
 
-1. Clonez ce dépôt :
-   
+1. Clonez ce dépôt :  
 ```bash
    git clone [https://github.com/matteo-dev/lol-ml-draft-assistant]
    cd lol-ml-draft-assistant
@@ -46,6 +45,57 @@ Le projet est divisé en scripts modulaires exécutables séquentiellement :
 ```
 
 3. Lancer le frontend :
+```bash
+  stramlit run 07_streamlit_app.py
+```
+
+
+# League of Legends: ML Draft & Runes Assistant
+
+A professional-grade analytical tool for League of Legends designed to recommend the best champion picks and rune pages during the draft phase. This project leverages Machine Learning models (XGBoost) trained on Challenger-tier data and uses game theory (Shapley Values / SHAP) to make every decision 100% interpretable.
+
+## Core Features
+
+- **Role-Specific Draft Optimizer:** Recommends the best champions to pick based on your team, the enemy team, bans, and your target role (Top, Jungle, Mid, Bot, Support).
+- **SHAP Interpretability (Pros & Cons):** The model is not a black box. Every recommendation is justified by a mathematical analysis of allied synergies (Pros) and enemy vulnerabilities (Cons), visualized through Plotly Waterfall charts.
+- **Matchup & Runes Engine (Full Tree):** Predicts the most optimal full rune page (Primary, Secondary, and Stat Shards) for a specific matchup using a multi-class classification model and Class Hashing.
+- **Streamlit UI Dashboard:** An interactive analytical dashboard fully integrated with the Riot Data Dragon API to fetch real-time champion portraits and official rune icons.
+
+## Tech Stack
+
+- **Data Extraction:** riotwatcher (Riot API Match-V5)
+- **Data Processing:** pandas, numpy, pyarrow (Parquet)
+- **Machine Learning:** scikit-learn (LabelEncoder), xgboost (Binary & Multi-class Softprob)
+- **Explainable AI (XAI):** shap (TreeExplainer)
+- **Frontend & DataViz:** streamlit, plotly
+- **CI/CD & Automation:** GitHub Actions, Playwright (Wake-up cron job)
+
+## Pipeline Architecture (V3)
+
+The project is divided into modular scripts executed sequentially:
+
+1. `01_data_extraction.py`: Challenger meta extraction (Rate Limit handling, Checkpointing).
+2. `02_preprocessing.py`: Zero-Sum Encoding (+1/-1) and dynamic role mapping.
+3. `03_model_training.py`: XGBoost training for win probability prediction.
+4. `04_inference_engine.py`: Role filtering and SHAP dichotomy parsing (Pros/Cons).
+5. `05_runes_preprocessing.py`: Class Hashing for full rune trees on direct matchups.
+6. `06_runes_training.py`: Meta filtering (Noise reduction) and high-speed Multi-class training (`tree_method='hist'`).
+7. `07_streamlit_app.py`: The final user interface combining both models.
+
+## Installation & Usage
+
+1. Clonez the repository :  
+```bash
+   git clone [https://github.com/matteo-dev/lol-ml-draft-assistant]
+   cd lol-ml-draft-assistant
+```
+
+2. Install requirements :
+```bash
+  pip install - r requirements.txt
+```
+
+3. Run Frontend :
 ```bash
   stramlit run 07_streamlit_app.py
 ```
