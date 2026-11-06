@@ -30,7 +30,7 @@ STAT_SHARDS_MAPPING = {
 # --- Import dynamique sécurisé de la Phase 4 (Draft V3) ---
 @st.cache_resource
 def load_draft_inference_engine():
-    file_path = "04_inference_engine_draft.py"
+    file_path = "04_inference_engine.py"
     module_name = "inference_engine_module"
     
     if not os.path.exists(file_path):
