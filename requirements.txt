@@ -1,0 +1,9 @@
+streamlit==1.31.0
+pandas==2.2.0
+numpy==1.26.4
+xgboost==2.0.3
+scikit-learn==1.4.0
+shap==0.44.1
+plotly==5.18.0
+requests==2.31.0
+pyarrow==15.0.0

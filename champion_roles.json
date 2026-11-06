@@ -1,0 +1,780 @@
+{
+    "24": [
+        "TOP",
+        "BOTTOM",
+        "MIDDLE",
+        "JUNGLE"
+    ],
+    "64": [
+        "JUNGLE"
+    ],
+    "142": [
+        "MIDDLE",
+        "BOTTOM",
+        "UTILITY",
+        "TOP"
+    ],
+    "202": [
+        "BOTTOM"
+    ],
+    "517": [
+        "UTILITY",
+        "JUNGLE",
+        "MIDDLE",
+        "TOP",
+        "BOTTOM"
+    ],
+    "58": [
+        "TOP",
+        "MIDDLE"
+    ],
+    "59": [
+        "JUNGLE"
+    ],
+    "131": [
+        "MIDDLE",
+        "TOP",
+        "JUNGLE"
+    ],
+    "18": [
+        "BOTTOM",
+        "TOP",
+        "MIDDLE"
+    ],
+    "89": [
+        "UTILITY"
+    ],
+    "86": [
+        "TOP",
+        "MIDDLE",
+        "BOTTOM"
+    ],
+    "126": [
+        "JUNGLE",
+        "TOP",
+        "MIDDLE"
+    ],
+    "13": [
+        "MIDDLE",
+        "TOP"
+    ],
+    "12": [
+        "UTILITY"
+    ],
+    "68": [
+        "TOP",
+        "MIDDLE"
+    ],
+    "91": [
+        "JUNGLE",
+        "MIDDLE"
+    ],
+    "777": [
+        "MIDDLE",
+        "TOP",
+        "BOTTOM"
+    ],
+    "518": [
+        "BOTTOM",
+        "MIDDLE",
+        "UTILITY",
+        "TOP",
+        "JUNGLE"
+    ],
+    "7": [
+        "UTILITY",
+        "MIDDLE",
+        "TOP"
+    ],
+    "79": [
+        "TOP",
+        "MIDDLE",
+        "UTILITY",
+        "JUNGLE"
+    ],
+    "238": [
+        "JUNGLE",
+        "MIDDLE",
+        "TOP",
+        "BOTTOM"
+    ],
+    "43": [
+        "UTILITY",
+        "TOP"
+    ],
+    "875": [
+        "TOP",
+        "BOTTOM",
+        "UTILITY",
+        "MIDDLE"
+    ],
+    "103": [
+        "MIDDLE",
+        "TOP",
+        "BOTTOM"
+    ],
+    "804": [
+        "BOTTOM"
+    ],
+    "50": [
+        "UTILITY",
+        "TOP",
+        "BOTTOM",
+        "MIDDLE"
+    ],
+    "98": [
+        "TOP",
+        "UTILITY",
+        "JUNGLE",
+        "MIDDLE",
+        "BOTTOM"
+    ],
+    "67": [
+        "BOTTOM",
+        "TOP",
+        "MIDDLE",
+        "JUNGLE"
+    ],
+    "17": [
+        "TOP",
+        "UTILITY",
+        "JUNGLE"
+    ],
+    "31": [
+        "JUNGLE",
+        "MIDDLE",
+        "TOP",
+        "UTILITY",
+        "BOTTOM"
+    ],
+    "112": [
+        "MIDDLE",
+        "BOTTOM",
+        "TOP"
+    ],
+    "429": [
+        "BOTTOM",
+        "TOP"
+    ],
+    "888": [
+        "UTILITY"
+    ],
+    "48": [
+        "TOP",
+        "JUNGLE",
+        "UTILITY",
+        "MIDDLE"
+    ],
+    "163": [
+        "JUNGLE",
+        "UTILITY",
+        "MIDDLE",
+        "BOTTOM"
+    ],
+    "30": [
+        "BOTTOM",
+        "TOP",
+        "JUNGLE",
+        "MIDDLE",
+        "UTILITY"
+    ],
+    "526": [
+        "UTILITY"
+    ],
+    "164": [
+        "TOP",
+        "UTILITY"
+    ],
+    "121": [
+        "JUNGLE"
+    ],
+    "23": [
+        "TOP",
+        "MIDDLE"
+    ],
+    "805": [
+        "JUNGLE",
+        "MIDDLE",
+        "BOTTOM",
+        "TOP"
+    ],
+    "92": [
+        "MIDDLE",
+        "TOP",
+        "JUNGLE",
+        "UTILITY"
+    ],
+    "51": [
+        "BOTTOM"
+    ],
+    "54": [
+        "TOP",
+        "JUNGLE",
+        "MIDDLE"
+    ],
+    "104": [
+        "JUNGLE"
+    ],
+    "60": [
+        "UTILITY",
+        "JUNGLE",
+        "TOP"
+    ],
+    "150": [
+        "TOP"
+    ],
+    "254": [
+        "JUNGLE"
+    ],
+    "61": [
+        "MIDDLE"
+    ],
+    "498": [
+        "BOTTOM"
+    ],
+    "111": [
+        "UTILITY"
+    ],
+    "5": [
+        "JUNGLE",
+        "TOP",
+        "MIDDLE"
+    ],
+    "893": [
+        "MIDDLE",
+        "TOP",
+        "BOTTOM"
+    ],
+    "42": [
+        "BOTTOM",
+        "MIDDLE",
+        "TOP"
+    ],
+    "27": [
+        "TOP",
+        "BOTTOM",
+        "MIDDLE"
+    ],
+    "76": [
+        "JUNGLE",
+        "UTILITY"
+    ],
+    "236": [
+        "MIDDLE",
+        "BOTTOM",
+        "TOP"
+    ],
+    "117": [
+        "UTILITY"
+    ],
+    "157": [
+        "MIDDLE",
+        "TOP",
+        "BOTTOM"
+    ],
+    "119": [
+        "BOTTOM"
+    ],
+    "80": [
+        "TOP",
+        "UTILITY",
+        "MIDDLE",
+        "JUNGLE"
+    ],
+    "4": [
+        "MIDDLE",
+        "BOTTOM",
+        "UTILITY",
+        "TOP"
+    ],
+    "161": [
+        "BOTTOM",
+        "UTILITY",
+        "TOP",
+        "MIDDLE"
+    ],
+    "37": [
+        "UTILITY"
+    ],
+    "2": [
+        "TOP",
+        "JUNGLE",
+        "MIDDLE",
+        "BOTTOM"
+    ],
+    "147": [
+        "UTILITY",
+        "BOTTOM",
+        "MIDDLE"
+    ],
+    "897": [
+        "TOP",
+        "UTILITY"
+    ],
+    "34": [
+        "MIDDLE",
+        "BOTTOM",
+        "TOP",
+        "UTILITY"
+    ],
+    "110": [
+        "BOTTOM",
+        "TOP",
+        "MIDDLE"
+    ],
+    "3": [
+        "MIDDLE",
+        "UTILITY",
+        "TOP"
+    ],
+    "136": [
+        "TOP",
+        "BOTTOM",
+        "UTILITY",
+        "MIDDLE"
+    ],
+    "421": [
+        "JUNGLE",
+        "TOP",
+        "MIDDLE"
+    ],
+    "8": [
+        "MIDDLE",
+        "TOP",
+        "BOTTOM"
+    ],
+    "81": [
+        "BOTTOM"
+    ],
+    "145": [
+        "BOTTOM"
+    ],
+    "516": [
+        "TOP"
+    ],
+    "84": [
+        "MIDDLE",
+        "TOP"
+    ],
+    "412": [
+        "UTILITY"
+    ],
+    "55": [
+        "MIDDLE",
+        "BOTTOM",
+        "TOP"
+    ],
+    "28": [
+        "JUNGLE"
+    ],
+    "134": [
+        "MIDDLE",
+        "BOTTOM"
+    ],
+    "201": [
+        "UTILITY"
+    ],
+    "266": [
+        "TOP",
+        "JUNGLE"
+    ],
+    "523": [
+        "BOTTOM"
+    ],
+    "222": [
+        "BOTTOM"
+    ],
+    "26": [
+        "UTILITY",
+        "TOP",
+        "MIDDLE",
+        "BOTTOM"
+    ],
+    "78": [
+        "UTILITY",
+        "JUNGLE",
+        "TOP"
+    ],
+    "246": [
+        "JUNGLE",
+        "MIDDLE"
+    ],
+    "14": [
+        "TOP",
+        "BOTTOM",
+        "JUNGLE",
+        "MIDDLE"
+    ],
+    "19": [
+        "TOP",
+        "MIDDLE",
+        "JUNGLE"
+    ],
+    "143": [
+        "JUNGLE",
+        "BOTTOM",
+        "MIDDLE",
+        "UTILITY"
+    ],
+    "267": [
+        "UTILITY"
+    ],
+    "99": [
+        "BOTTOM",
+        "UTILITY",
+        "MIDDLE"
+    ],
+    "36": [
+        "JUNGLE",
+        "TOP",
+        "MIDDLE"
+    ],
+    "57": [
+        "UTILITY",
+        "TOP",
+        "JUNGLE"
+    ],
+    "240": [
+        "TOP",
+        "MIDDLE"
+    ],
+    "83": [
+        "TOP",
+        "MIDDLE"
+    ],
+    "53": [
+        "UTILITY"
+    ],
+    "20": [
+        "JUNGLE",
+        "MIDDLE"
+    ],
+    "497": [
+        "UTILITY"
+    ],
+    "876": [
+        "JUNGLE"
+    ],
+    "29": [
+        "MIDDLE",
+        "BOTTOM",
+        "UTILITY",
+        "TOP"
+    ],
+    "555": [
+        "UTILITY"
+    ],
+    "102": [
+        "JUNGLE",
+        "TOP"
+    ],
+    "40": [
+        "UTILITY",
+        "TOP"
+    ],
+    "62": [
+        "JUNGLE",
+        "TOP"
+    ],
+    "895": [
+        "BOTTOM"
+    ],
+    "85": [
+        "TOP",
+        "MIDDLE",
+        "BOTTOM",
+        "UTILITY"
+    ],
+    "22": [
+        "BOTTOM"
+    ],
+    "799": [
+        "TOP",
+        "MIDDLE",
+        "JUNGLE"
+    ],
+    "107": [
+        "JUNGLE",
+        "TOP"
+    ],
+    "9": [
+        "UTILITY",
+        "JUNGLE",
+        "TOP"
+    ],
+    "21": [
+        "BOTTOM",
+        "UTILITY"
+    ],
+    "69": [
+        "MIDDLE",
+        "BOTTOM",
+        "TOP"
+    ],
+    "16": [
+        "UTILITY",
+        "BOTTOM"
+    ],
+    "904": [
+        "TOP",
+        "JUNGLE"
+    ],
+    "910": [
+        "MIDDLE",
+        "BOTTOM",
+        "UTILITY",
+        "TOP"
+    ],
+    "234": [
+        "JUNGLE",
+        "MIDDLE"
+    ],
+    "96": [
+        "BOTTOM",
+        "MIDDLE",
+        "JUNGLE",
+        "TOP"
+    ],
+    "39": [
+        "TOP",
+        "MIDDLE"
+    ],
+    "887": [
+        "TOP",
+        "MIDDLE",
+        "JUNGLE",
+        "BOTTOM"
+    ],
+    "120": [
+        "JUNGLE"
+    ],
+    "72": [
+        "JUNGLE",
+        "UTILITY"
+    ],
+    "25": [
+        "UTILITY",
+        "JUNGLE",
+        "TOP",
+        "MIDDLE"
+    ],
+    "122": [
+        "TOP",
+        "JUNGLE",
+        "MIDDLE"
+    ],
+    "141": [
+        "JUNGLE"
+    ],
+    "105": [
+        "MIDDLE",
+        "JUNGLE",
+        "BOTTOM",
+        "TOP"
+    ],
+    "221": [
+        "BOTTOM",
+        "TOP"
+    ],
+    "902": [
+        "UTILITY"
+    ],
+    "90": [
+        "MIDDLE",
+        "BOTTOM"
+    ],
+    "235": [
+        "UTILITY"
+    ],
+    "74": [
+        "TOP",
+        "BOTTOM",
+        "UTILITY"
+    ],
+    "114": [
+        "TOP",
+        "BOTTOM",
+        "MIDDLE"
+    ],
+    "166": [
+        "TOP",
+        "MIDDLE",
+        "BOTTOM",
+        "UTILITY"
+    ],
+    "268": [
+        "MIDDLE",
+        "TOP"
+    ],
+    "115": [
+        "BOTTOM",
+        "MIDDLE"
+    ],
+    "711": [
+        "MIDDLE",
+        "TOP",
+        "BOTTOM"
+    ],
+    "154": [
+        "JUNGLE",
+        "UTILITY",
+        "TOP",
+        "MIDDLE"
+    ],
+    "15": [
+        "BOTTOM",
+        "MIDDLE"
+    ],
+    "432": [
+        "UTILITY"
+    ],
+    "245": [
+        "JUNGLE",
+        "MIDDLE",
+        "TOP",
+        "UTILITY",
+        "BOTTOM"
+    ],
+    "106": [
+        "TOP",
+        "MIDDLE",
+        "JUNGLE"
+    ],
+    "44": [
+        "UTILITY",
+        "BOTTOM"
+    ],
+    "101": [
+        "MIDDLE",
+        "BOTTOM",
+        "UTILITY"
+    ],
+    "901": [
+        "BOTTOM",
+        "MIDDLE",
+        "TOP"
+    ],
+    "203": [
+        "JUNGLE"
+    ],
+    "1": [
+        "TOP",
+        "MIDDLE",
+        "UTILITY",
+        "BOTTOM"
+    ],
+    "133": [
+        "JUNGLE",
+        "TOP",
+        "MIDDLE",
+        "BOTTOM"
+    ],
+    "950": [
+        "JUNGLE",
+        "TOP",
+        "MIDDLE"
+    ],
+    "127": [
+        "MIDDLE",
+        "TOP"
+    ],
+    "35": [
+        "JUNGLE",
+        "UTILITY"
+    ],
+    "75": [
+        "MIDDLE",
+        "TOP",
+        "UTILITY"
+    ],
+    "63": [
+        "BOTTOM",
+        "JUNGLE",
+        "UTILITY",
+        "TOP",
+        "MIDDLE"
+    ],
+    "41": [
+        "TOP",
+        "MIDDLE"
+    ],
+    "77": [
+        "JUNGLE",
+        "TOP",
+        "MIDDLE"
+    ],
+    "427": [
+        "JUNGLE",
+        "UTILITY"
+    ],
+    "10": [
+        "MIDDLE",
+        "TOP",
+        "JUNGLE"
+    ],
+    "82": [
+        "TOP",
+        "JUNGLE"
+    ],
+    "45": [
+        "MIDDLE",
+        "BOTTOM",
+        "UTILITY",
+        "TOP"
+    ],
+    "800": [
+        "MIDDLE",
+        "BOTTOM",
+        "UTILITY"
+    ],
+    "200": [
+        "JUNGLE"
+    ],
+    "113": [
+        "JUNGLE",
+        "TOP",
+        "UTILITY"
+    ],
+    "233": [
+        "JUNGLE",
+        "TOP"
+    ],
+    "350": [
+        "UTILITY"
+    ],
+    "38": [
+        "TOP",
+        "MIDDLE"
+    ],
+    "223": [
+        "UTILITY",
+        "BOTTOM",
+        "TOP"
+    ],
+    "11": [
+        "JUNGLE",
+        "BOTTOM"
+    ],
+    "56": [
+        "JUNGLE"
+    ],
+    "32": [
+        "UTILITY",
+        "JUNGLE"
+    ],
+    "360": [
+        "BOTTOM"
+    ],
+    "6": [
+        "TOP",
+        "MIDDLE"
+    ],
+    "420": [
+        "TOP"
+    ],
+    "33": [
+        "JUNGLE",
+        "TOP",
+        "UTILITY"
+    ]
+}
