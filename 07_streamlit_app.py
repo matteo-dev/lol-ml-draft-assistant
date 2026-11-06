@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import gzip
 import importlib.util
 import requests
 import numpy as np
@@ -10,7 +11,7 @@ import plotly.graph_objects as go
 import xgboost as xgb
 from typing import Dict, Any, List
 
-# --- Streamlit Page Configuration ---
+# --- Configuration de la page Streamlit ---
 st.set_page_config(
     page_title="LoL ML Assistant V3",
     page_icon="🤖",
@@ -18,22 +19,22 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- Stat Shards Mapping ---
+# --- Fragments de Stats (Stat Shards) ---
 STAT_SHARDS_MAPPING = {
-    5001: "Scaling Health", 5002: "Armor", 5003: "Magic Resist",
-    5005: "Attack Speed", 5007: "Ability Haste",
-    5008: "Adaptive Force", 5010: "Movement Speed",
-    5011: "Flat Health", 5013: "Tenacity"
+    5001: "Santé Scaling", 5002: "Armure", 5003: "Résistance Magique",
+    5005: "Vitesse d'Attaque", 5007: "Accélération de Compétence",
+    5008: "Force Adaptative", 5010: "Vitesse de Déplacement",
+    5011: "Santé Brute", 5013: "Ténacité"
 }
 
-# --- Secure Dynamic Import of Phase 4 (Draft V3) ---
+# --- Import dynamique sécurisé de la Phase 4 (Draft V3) ---
 @st.cache_resource
 def load_draft_inference_engine():
-    file_path = "04_inference_engine.py"
+    file_path = "04_inference_engine_draft.py"
     module_name = "inference_engine_module"
     
     if not os.path.exists(file_path):
-        st.error(f"Missing file: {file_path}. The draft inference backend is required.")
+        st.error(f"Fichier manquant : {file_path}. Le backend d'inférence draft est requis.")
         st.stop()
         
     try:
@@ -43,17 +44,30 @@ def load_draft_inference_engine():
         spec.loader.exec_module(module)
         return module.DraftInferenceEngineV3
     except Exception as e:
-        st.error(f"Error loading Draft Inference V3: {e}")
+        st.error(f"Erreur lors du chargement de la Draft Inference V3 : {e}")
         st.stop()
 
-# --- Runes Inference Engine (Full Tree & Encoder) ---
+# --- Moteur d'Inférence des Runes (Arbre Complet, Encodeur & Support GZIP) ---
 class RunesInferenceEngineV3:
     def __init__(self, model_path: str, config_path: str, encoder_path: str):
         self.model = xgb.XGBClassifier()
-        self.model.load_model(model_path)
-        with open(config_path, 'r') as f:
-            self.config = json.load(f)
-        with open(encoder_path, 'r') as f:
+        
+        # Chargement intelligent du modèle XGBoost (supporte le .json.gz en mémoire)
+        if model_path.endswith('.gz'):
+            with gzip.open(model_path, 'rb') as f:
+                self.model.load_model(bytearray(f.read()))
+        else:
+            self.model.load_model(model_path)
+        
+        # Lecture transparente du JSON compressé (GZIP) pour la config
+        if config_path.endswith('.gz'):
+            with gzip.open(config_path, 'rt', encoding='utf-8') as f:
+                self.config = json.load(f)
+        else:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                self.config = json.load(f)
+                
+        with open(encoder_path, 'r', encoding='utf-8') as f:
             self.encoder = json.load(f)
 
     def get_top_rune_pages(self, champ_id: int, opp_id: int, position: str, top_k: int = 2) -> List[Dict[str, Any]]:
@@ -73,20 +87,15 @@ class RunesInferenceEngineV3:
         
         results = []
         for enc_idx in top_encoded_indices:
-            # 1. XGBoost returns a new ID (enc_idx)
-            # 2. The encoder translates it to the old ID (old_idx)
             old_idx = self.encoder.get(str(enc_idx))
-            
-            # 3. Retrieve the full page with this old ID
             page_data = self.config['idx_to_runes'].get(str(old_idx), {})
-            
             results.append({
                 "page": page_data,
                 "probability": float(probs[enc_idx])
             })
         return results
 
-# --- Extended Data Dragon API ---
+# --- API Data Dragon Étendue ---
 class DataDragonAPI:
     def __init__(self):
         self.version = self._get_latest_version()
@@ -100,7 +109,7 @@ class DataDragonAPI:
 
     @st.cache_data
     def _get_champion_data(_self) -> Dict[str, Any]:
-        url = f"http://ddragon.leagueoflegends.com/cdn/{_self.version}/data/en_US/champion.json"
+        url = f"http://ddragon.leagueoflegends.com/cdn/{_self.version}/data/fr_FR/champion.json"
         return requests.get(url).json()['data']
 
     def _build_champ_mapping(self) -> Dict[int, Dict[str, str]]:
@@ -116,7 +125,7 @@ class DataDragonAPI:
     @st.cache_data
     def _build_runes_mapping(_self) -> Dict[int, Dict[str, str]]:
         mapping = {}
-        url = f"https://ddragon.leagueoflegends.com/cdn/{_self.version}/data/en_US/runesReforged.json"
+        url = f"https://ddragon.leagueoflegends.com/cdn/{_self.version}/data/fr_FR/runesReforged.json"
         try:
             trees = requests.get(url).json()
             for tree in trees:
@@ -125,20 +134,20 @@ class DataDragonAPI:
                     for rune in slot['runes']:
                         mapping[rune['id']] = {"name": rune['name'], "image_url": f"https://ddragon.leagueoflegends.com/cdn/img/{rune['icon']}"}
         except Exception as e:
-            st.warning(f"Error loading Rune icons: {e}")
+            st.warning(f"Erreur de chargement des icônes de Runes : {e}")
         return mapping
 
     def get_champion_info(self, champ_id: int) -> Dict[str, str]:
-        return self.id_to_name.get(champ_id, {"name": f"Unknown ({champ_id})", "image_url": ""})
+        return self.id_to_name.get(champ_id, {"name": f"Inconnu ({champ_id})", "image_url": ""})
 
     def get_rune_info(self, rune_id: int) -> Dict[str, str]:
         return self.runes_mapping.get(rune_id, {"name": f"Rune ({rune_id})", "image_url": ""})
 
-# --- UI Components ---
+# --- Composants UI ---
 def plot_shap_waterfall(pros: List[Dict], cons: List[Dict], ddragon: DataDragonAPI):
     all_reasons = pros + cons
     if not all_reasons:
-        return go.Figure().add_annotation(text="No significant SHAP data", showarrow=False)
+        return go.Figure().add_annotation(text="Aucune donnée SHAP significative", showarrow=False)
 
     x_labels, y_values = [], []
     for r in all_reasons:
@@ -147,13 +156,13 @@ def plot_shap_waterfall(pros: List[Dict], cons: List[Dict], ddragon: DataDragonA
         y_values.append(r['shap_value'])
 
     fig = go.Figure(go.Waterfall(
-        name="SHAP Impact", orientation="v", measure=["relative"] * len(all_reasons),
+        name="Impact SHAP", orientation="v", measure=["relative"] * len(all_reasons),
         x=x_labels, text=[f"{v:+.3f}" for v in y_values], textposition="outside", y=y_values,
         connector={"line": {"color": "rgba(200,200,200,0.5)"}},
         decreasing={"marker": {"color": "#ef553b"}}, increasing={"marker": {"color": "#00cc96"}}
     ))
     fig.update_layout(
-        title="Mathematical Impact on Victory (Log-Odds)", title_font_size=12, height=300,
+        title="Impact Mathématique sur la Victoire (Log-Odds)", title_font_size=12, height=300,
         margin=dict(l=20, r=20, t=30, b=20), plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
     )
     return fig
@@ -162,7 +171,7 @@ def display_rune_tree(page: Dict[str, Any], ddragon: DataDragonAPI):
     col_p, col_s, col_stat = st.columns([2, 1.5, 1.5])
     
     with col_p:
-        st.markdown("**Primary Tree**")
+        st.markdown("**Arbre Principal**")
         p_style = page.get('primary_style')
         if p_style:
             info = ddragon.get_rune_info(p_style)
@@ -172,7 +181,7 @@ def display_rune_tree(page: Dict[str, Any], ddragon: DataDragonAPI):
                 st.image(r_info['image_url'], width=40, caption=r_info['name'])
                 
     with col_s:
-        st.markdown("**Secondary Tree**")
+        st.markdown("**Arbre Secondaire**")
         s_style = page.get('sub_style')
         if s_style:
             info = ddragon.get_rune_info(s_style)
@@ -182,74 +191,90 @@ def display_rune_tree(page: Dict[str, Any], ddragon: DataDragonAPI):
                 st.image(r_info['image_url'], width=30, caption=r_info['name'])
 
     with col_stat:
-        st.markdown("**Statistics**")
-        st.write(f"🗡️ {STAT_SHARDS_MAPPING.get(page.get('stat_offense'), 'Offense')}")
-        st.write(f"⚖️ {STAT_SHARDS_MAPPING.get(page.get('stat_flex'), 'Flex')}")
-        st.write(f"🛡️ {STAT_SHARDS_MAPPING.get(page.get('stat_defense'), 'Defense')}")
+        st.markdown("**Statistiques**")
+        st.write(f"🗡️ {STAT_SHARDS_MAPPING.get(page.get('stat_offense'), 'Offensif')}")
+        st.write(f"⚖️ {STAT_SHARDS_MAPPING.get(page.get('stat_flex'), 'Flexible')}")
+        st.write(f"🛡️ {STAT_SHARDS_MAPPING.get(page.get('stat_defense'), 'Défensif')}")
 
-# --- Main Function ---
+def get_existing_file(candidates: List[str]) -> str:
+    """Retourne le premier fichier existant parmi une liste de candidats, ou une chaîne vide."""
+    for c in candidates:
+        if os.path.exists(c):
+            return c
+    return ""
+
+# --- Fonction Principale ---
 def main():
-    st.title("🧠 League of Legends: Draft & Runes Analyst V3")
+    st.title("🧠 League of Legends : Analyste Draft & Runes V3")
 
-    with st.spinner("Loading Data Dragon API..."):
+    with st.spinner("Chargement de l'API Data Dragon..."):
         ddragon = DataDragonAPI()
     
     DraftInferenceEngineV3 = load_draft_inference_engine()
     
-    # Strict validation of the 6 required files
-    REQUIRED_FILES = [
-        "xgboost_draft_model_v3.json", "model_features_v3.json", "champion_roles.json",
-        "xgboost_runes_model_v3.json", "runes_features_v3.json", "runes_encoder.json"
-    ]
+    # Recherche souple des fichiers (supporte les versions compressées .gz)
+    DRAFT_MODEL = get_existing_file(["xgboost_draft_model_v3.json.gz", "xgboost_draft_model_v3.json"])
+    DRAFT_CONFIG = get_existing_file(["model_features_v3.json.gz", "model_features_v3.json"])
+    ROLES_FILE = get_existing_file(["champion_roles.json.gz", "champion_roles.json"])
+    RUNES_MODEL = get_existing_file(["xgboost_runes_model_v3.json.gz", "xgboost_runes_model_v3.json"])
+    RUNES_CONFIG = get_existing_file(["runes_features_v3.json.gz", "runes_features_v3.json"])
+    RUNES_ENCODER = get_existing_file(["runes_encoder.json.gz", "runes_encoder.json"])
     
-    missing_files = [f for f in REQUIRED_FILES if not os.path.exists(f)]
+    missing_files = []
+    if not DRAFT_MODEL: missing_files.append("Modèle Draft")
+    if not DRAFT_CONFIG: missing_files.append("Config Draft")
+    if not ROLES_FILE: missing_files.append("Fichier Rôles")
+    if not RUNES_MODEL: missing_files.append("Modèle Runes")
+    if not RUNES_CONFIG: missing_files.append("Config Runes")
+    if not RUNES_ENCODER: missing_files.append("Encodeur Runes")
+
     if missing_files:
-        st.error(f"Missing files: {', '.join(missing_files)}. Please rerun the training.")
+        st.error(f"Fichiers manquants : {', '.join(missing_files)}. Veuillez vérifier vos exports.")
         st.stop()
 
     engine_draft = DraftInferenceEngineV3(
-        model_path=REQUIRED_FILES[0], 
-        config_path=REQUIRED_FILES[1], 
-        roles_path=REQUIRED_FILES[2]
+        model_path=DRAFT_MODEL, 
+        config_path=DRAFT_CONFIG, 
+        roles_path=ROLES_FILE
     )
     engine_runes = RunesInferenceEngineV3(
-        model_path=REQUIRED_FILES[3], 
-        config_path=REQUIRED_FILES[4],
-        encoder_path=REQUIRED_FILES[5]
+        model_path=RUNES_MODEL, 
+        config_path=RUNES_CONFIG,
+        encoder_path=RUNES_ENCODER
     )
 
     available_champs = engine_draft.champion_ids
     champ_options = {c_id: ddragon.get_champion_info(c_id)['name'] for c_id in available_champs}
     def format_champ(c_id): return champ_options.get(c_id, str(c_id))
 
-    tab_draft, tab_runes = st.tabs(["🔮 Draft Optimizer (Roles & SHAP)", "⚔️ Matchups (Rune Trees)"])
+    tab_draft, tab_runes = st.tabs(["🔮 Draft Optimizer (Rôles & SHAP)", "⚔️ Matchups (Arbres de Runes)"])
 
     # -------------------------------------
-    # TAB 1: DRAFT & SHAP PROS/CONS
+    # ONGLET 1 : DRAFT & SHAP PROS/CONS
     # -------------------------------------
     with tab_draft:
-        st.sidebar.header("Draft Configuration")
-        target_role = st.sidebar.selectbox("🎯 Target Role", options=["TOP", "JUNGLE", "MIDDLE", "BOTTOM", "UTILITY"])
+        st.sidebar.header("Configuration de la Draft")
+        target_role = st.sidebar.selectbox("🎯 Rôle recherché", options=["TOP", "JUNGLE", "MIDDLE", "BOTTOM", "UTILITY"])
         st.sidebar.markdown("---")
-        bans = st.sidebar.multiselect("Bans (Global)", options=available_champs, format_func=format_champ, max_selections=10)
-        allies = st.sidebar.multiselect("Our Team", options=available_champs, format_func=format_champ, max_selections=4)
-        enemies = st.sidebar.multiselect("Enemy Team", options=available_champs, format_func=format_champ, max_selections=5)
+        bans = st.sidebar.multiselect("Bans (Globaux)", options=available_champs, format_func=format_champ, max_selections=10)
+        allies = st.sidebar.multiselect("Notre Équipe", options=available_champs, format_func=format_champ, max_selections=4)
+        enemies = st.sidebar.multiselect("Équipe Ennemie", options=available_champs, format_func=format_champ, max_selections=5)
 
         overlap = set(bans) & set(allies) | set(bans) & set(enemies) | set(allies) & set(enemies)
         if overlap:
-            st.sidebar.error("Error: A champion can only have one status (Ban/Ally/Enemy).")
+            st.sidebar.error("Erreur : Un champion ne peut avoir qu'un seul statut (Ban/Allié/Ennemi).")
         else:
-            if st.sidebar.button("🧠 Analyze Draft", type="primary", use_container_width=True):
+            if st.sidebar.button("🧠 Analyser la Draft", type="primary", use_container_width=True):
                 if len(allies) >= 5:
-                    st.info("Full composition.")
+                    st.info("Composition complète.")
                 else:
-                    with st.spinner(f"Searching for the best {target_role}..."):
+                    with st.spinner(f"Recherche du meilleur {target_role}..."):
                         results = engine_draft.get_recommendations(allies, enemies, bans, target_role, top_k=2)
                         
                     if "error" in results:
                         st.error(results["error"])
                     else:
-                        st.subheader(f"Top 2 Recommendations for: {target_role}")
+                        st.subheader(f"Top 2 Recommandations pour : {target_role}")
                         cols = st.columns(2)
                         
                         for i, rec in enumerate(results["top_picks"]):
@@ -257,47 +282,47 @@ def main():
                             analysis = rec.get("analysis", {"pros": [], "cons": []})
                             
                             with cols[i]:
-                                st.markdown(f"### #{i+1}\n{c_info['name']}")
+                                st.markdown(f"### #{i+1} - {c_info['name']}")
                                 
                                 img_col, metric_col = st.columns([1, 2])
                                 with img_col:
                                     if c_info["image_url"]: st.image(c_info["image_url"], width=100)
                                 with metric_col:
-                                    st.metric(label="Win Probability", value=f"{rec['win_probability']*100:.1f}%")
+                                    st.metric(label="Win Probabilité", value=f"{rec['win_probability']*100:.1f}%")
 
-                                st.markdown("✅ **Pros of this pick:**")
+                                st.markdown("✅ **Avantages de ce pick :**")
                                 for pro in analysis['pros']:
                                     t_name = ddragon.get_champion_info(pro['champion_id'])['name']
                                     st.write(f"- {pro['reason']} **{t_name}** *(+{pro['shap_value']:.2f})*")
-                                if not analysis['pros']: st.write("- No notable advantages.")
+                                if not analysis['pros']: st.write("- Aucun avantage saillant.")
 
-                                st.markdown("❌ **Cons / Risks:**")
+                                st.markdown("❌ **Inconvénients / Risques :**")
                                 for con in analysis['cons']:
                                     t_name = ddragon.get_champion_info(con['champion_id'])['name']
                                     st.write(f"- {con['reason']} **{t_name}** *({con['shap_value']:.2f})*")
-                                if not analysis['cons']: st.write("- No major risks detected.")
+                                if not analysis['cons']: st.write("- Aucun risque majeur détecté.")
 
                                 fig = plot_shap_waterfall(analysis['pros'], analysis['cons'], ddragon)
                                 st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False}, key=f"draft_{i}_{rec['champion_id']}")
 
     # -------------------------------------
-    # TAB 2: MULTI-CLASS RUNES V3
+    # ONGLET 2 : RUNES MULTI-CLASSES V3
     # -------------------------------------
     with tab_runes:
-        st.markdown("### Full Rune Tree Optimization")
+        st.markdown("### Optimisation de l'Arbre de Runes Complet")
         
         rc1, rc2, rc3 = st.columns(3)
-        with rc1: position = st.selectbox("Role (Lane)", options=["TOP", "JUNGLE", "MIDDLE", "BOTTOM", "UTILITY"], key="r_pos")
-        with rc2: our_champ = st.selectbox("Our Champion", options=available_champs, format_func=format_champ, key="r_our")
-        with rc3: opp_champ = st.selectbox("Direct Matchup (Opponent)", options=available_champs, format_func=format_champ, key="r_opp")
+        with rc1: position = st.selectbox("Rôle (Lane)", options=["TOP", "JUNGLE", "MIDDLE", "BOTTOM", "UTILITY"], key="r_pos")
+        with rc2: our_champ = st.selectbox("Notre Champion", options=available_champs, format_func=format_champ, key="r_our")
+        with rc3: opp_champ = st.selectbox("Adversaire Direct", options=available_champs, format_func=format_champ, key="r_opp")
 
-        if st.button("⚡ Generate Rune Pages", use_container_width=True):
+        if st.button("⚡ Générer les Pages de Runes", use_container_width=True):
             if our_champ == opp_champ:
-                st.warning("Mirror matchups are not possible in a classic draft.")
+                st.warning("Matchup miroir impossible en draft classique.")
             else:
                 rune_results = engine_runes.get_top_rune_pages(our_champ, opp_champ, position, top_k=2)
                 st.markdown("---")
-                st.subheader(f"Best Pages for {format_champ(our_champ)} vs {format_champ(opp_champ)}")
+                st.subheader(f"Meilleures Pages pour {format_champ(our_champ)} vs {format_champ(opp_champ)}")
                 
                 rune_cols = st.columns(2)
                 for i, rec in enumerate(rune_results):
@@ -306,7 +331,7 @@ def main():
                         if rec['page']:
                             display_rune_tree(rec['page'], ddragon)
                         else:
-                            st.error("Invalid or corrupted rune data for this class.")
+                            st.error("Données de runes invalides ou corrompues pour cette classe.")
 
 if __name__ == "__main__":
     main()
