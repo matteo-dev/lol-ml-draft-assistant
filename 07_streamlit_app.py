@@ -216,7 +216,7 @@ def main():
     DRAFT_MODEL = get_existing_file(["xgboost_draft_model_v3.json.gz", "xgboost_draft_model_v3.json"])
     DRAFT_CONFIG = get_existing_file(["model_features_v3.json.gz", "model_features_v3.json"])
     ROLES_FILE = get_existing_file(["champion_roles.json.gz", "champion_roles.json"])
-    RUNES_MODEL = get_existing_file(["xgboost_runes_model_v3.json.gz", "xgboost_runes_model_v3.json"])
+    RUNES_MODEL = get_existing_file(["xgboost_runes_model_v3.json.gz"])
     RUNES_CONFIG = get_existing_file(["runes_features_v3.json.gz", "runes_features_v3.json"])
     RUNES_ENCODER = get_existing_file(["runes_encoder.json.gz", "runes_encoder.json"])
     
